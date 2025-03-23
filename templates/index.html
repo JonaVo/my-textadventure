@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Post-Apocalyptic Text Adventure</title>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+        font-family: "Courier New", Courier, monospace;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        height: 100vh;
+        margin: 0;
+        margin-top: 20vh;
+      }
+      .container {
+        text-align: start;
+        animation: fadeIn 2s;
+        max-width: 700px; /* Begrenze die Breite auf 700px */
+        margin: 0 auto; /* Zentriert die Container-Box */
+      }
+      .situation {
+        min-height: 200px;
+      }
+      /*@keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }*/
+      input[type="text"] {
+        background-color: #111; /* Dunkles Grau für den Hintergrund */
+        color: #ccc; /* Hellgraue Schrift */
+        border: 1px solid #555; /* Etwas dunklerer Rand */
+        padding: 8px;
+        font-size: 16px;
+        margin-top: 20px; /* Mehr Abstand nach oben */
+      }
+      /* Entfernt die blaue Outline bei Fokus */
+      input[type="text"]:focus {
+        outline: none;
+        box-shadow: none;
+      }
+      input[type="submit"] {
+        background-color: #555;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      input[type="submit"]:hover {
+        background-color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Post-Apocalyptic Text Adventure</h1>
+      <!-- Hier sorgen wir mit white-space: pre-line dafür, dass Zeilenumbrüche im String angezeigt werden. -->
+      <p style="white-space: pre-line" class="situation">{{ description }}</p>
+
+      <form method="post" action="{{ url_for('process_command') }}">
+        <input
+          type="text"
+          name="command"
+          autofocus
+          placeholder="Befehl eingeben"
+        />
+        <p style="font-size: 14px; color: #ccc; margin-top: 8px">
+          Drücke Enter um deine Eingabe abzusenden
+        </p>
+      </form>
+
+      {% if message %}
+      <!-- Auch hier white-space: pre-line, falls du Zeilenumbrüche im message-Text hast. -->
+      <p style="white-space: pre-line; color: red">{{ message }}</p>
+      {% endif %}
+    </div>
+  </body>
+</html>
