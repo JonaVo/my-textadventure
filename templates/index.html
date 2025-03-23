@@ -64,7 +64,7 @@
       <!-- Hier sorgen wir mit white-space: pre-line dafür, dass Zeilenumbrüche im String angezeigt werden. -->
       <p style="white-space: pre-line" class="situation">{{ description }}</p>
 
-      <form method="post" action="{{ url_for('process_command') }}">
+      <form method="post" action="{{ url_for('handle_command') }}">
         <input
           type="text"
           name="command"
