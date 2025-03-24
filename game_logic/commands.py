@@ -17,7 +17,7 @@ def process_command(command_text, session_data, rooms, items, npcs):
     obj = words[1] if len(words) > 1 else ""
 
     current_room = session_data.get('current_room', 'start')
-    inventory = session_data.get('inventory', [])
+    inventory = session_data.get('inventory', {})
 
     # Wurde der Code für die Truhe gelernt?
     got_code = session_data.get('got_code', False)
@@ -40,7 +40,11 @@ def process_command(command_text, session_data, rooms, items, npcs):
 
                 #checkt ob der User den Schlüssel im inventar hat
                 if "key" in rooms[next_room]:
-                    if rooms[next_room]['key'] not in session['inventory']:
+
+                    inventory = session['inventory']
+                    item_names = [item_dict["name"] for item_dict in inventory.values()]
+
+                    if rooms[next_room]['key'] not in item_names:
                         message = (
                                 "Dieser Raum ist noch viel zu gefährlich für dich. Versuch NICHT nocheinmal ihn zu betreten. Es könnte das Letzte sein, was du tust."
                             )
@@ -67,7 +71,13 @@ def process_command(command_text, session_data, rooms, items, npcs):
     # 2) Nimm
     if verb == 'nimm':
         if obj in items and items[obj]['location'] == current_room and items[obj]['pickupable']:
-            inventory.append(obj)
+
+            inventory = session_data['inventory']  # inventory ist ein Dict
+            inventory[obj] = items[obj]           # Speichere das Item unter seinem Namen
+            session_data['inventory'] = inventory # Zurück in die Session
+
+
+
             session_data['inventory'] = inventory
             items[obj]['location'] = 'inventory'
             message = f"Du hebst den {obj} auf."
@@ -121,32 +131,24 @@ def process_command(command_text, session_data, rooms, items, npcs):
                     ]
 
                     if "waffe" in inventory:
-                        # Spieler hat die Waffe bereits
                         message += (
                             "\n\nDer Mechaniker mustert dich: "
                             "»Du hast ja schon die Waffe! "
                             "Verschwende keine Zeit und erledige das Monster!«"
                         )
                     else:
-                        # Prüfe, ob alle Teile im Inventar sind
+                        # Prüfen, ob alle benötigten Teile im Inventar sind
+                        # (da inventory ein Dict ist, fragen wir einfach nach den Keys)
                         if all(teil in inventory for teil in benoetigte_teile):
                             session_data['waffe_fertig'] = True
-                            # Entferne die Teile aus dem Inventar
-                            for teil in benoetigte_teile:
-                                inventory.remove(teil)
 
-                            # Lege die neue Waffe ins Inventar
-                            inventory.append("waffe")
-                            # Falls du möchtest, dass man "untersuche waffe" machen kann:
-                            items["waffe"] = {
-                                "name": "waffe",
-                                "description": (
-                                    "Eine zusammengebaute Waffe, stark genug "
-                                    "um das Monster zu töten."
-                                ),
-                                "location": "inventory",
-                                "pickupable": True
-                            }
+                            # Entferne die Teile aus dem Inventar-Dict
+                            for teil in benoetigte_teile:
+                                del inventory[teil]
+
+                            # Nimm das existierende Waffe-Item aus items und lege es ins Inventar
+                            items["waffe"]["location"] = "inventory"
+                            inventory["waffe"] = items["waffe"]
 
                             message += (
                                 "\n\nDer Mechaniker grinst: »Du hast ja alles! "
@@ -218,7 +220,9 @@ def process_command(command_text, session_data, rooms, items, npcs):
     # 6) Inventar
     if verb == 'inventar':
         if inventory:
-            message = "Dein Inventar enthält: " + ", ".join(inventory)
+            # inventory ist ein dict: {"schlüssel": {..}, "stahlrohr": {..}, ...}
+            item_names = [item_obj["name"] for item_obj in inventory.values()]
+            message = "Dein Inventar enthält: " + ", ".join(item_names)
         else:
             message = "Dein Inventar ist leer."
         return message, error, new_level, end_game, won_game

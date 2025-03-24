@@ -97,7 +97,8 @@ items_level2 = {
             "Ein massives Stahlrohr, das als Lauf für eine Waffe dienen könnte."
         ),
         "location": "werkhalle",  # Findest du in der Werkhalle
-        "pickupable": True
+        "pickupable": True,
+        "image": "stahlrohr.png"
     },
     "abzugseinheit": {
         "name": "abzugseinheit",
@@ -105,7 +106,8 @@ items_level2 = {
             "Ein Abzug und ein kleiner Mechanismus. Könnte Teil einer Schusswaffe sein."
         ),
         "location": "lagerhalle",  # Liegt in einer Kiste in der Lagerhalle
-        "pickupable": True
+        "pickupable": True,
+        "image": "abzugseinheit.png"
     },
     "energiezelle": {
         "name": "energiezelle",
@@ -113,7 +115,8 @@ items_level2 = {
             "Eine kleine Energiezelle, die Strom für eine futuristische Waffe liefert."
         ),
         "location": "chemielabor",  # Musst du im Labor bergen
-        "pickupable": True
+        "pickupable": True,
+        "image": "energiezelle.png"
     },
     "spezialkleber": {
         "name": "spezialkleber",
@@ -121,7 +124,8 @@ items_level2 = {
             "Ein hochfester Klebstoff, um Metallteile miteinander zu verbinden."
         ),
         "location": "chemielabor",
-        "pickupable": True
+        "pickupable": True,
+        "image": "spezialkleber.png"
     },
     # Werkzeug, das der Mechaniker zum Zusammenbauen braucht
     "schweissgeraet": {
@@ -131,7 +135,8 @@ items_level2 = {
             "um die Waffe zusammenzusetzen."
         ),
         "location": "werkhalle",
-        "pickupable": True
+        "pickupable": True,
+        "image": "schweissgeraet.png"
     },
     # Optional: Gasmaske oder Schlüssel
     "gasmaske": {
@@ -140,7 +145,8 @@ items_level2 = {
             "Eine Gasmaske, die dich vor giftigen Dämpfen schützt."
         ),
         "location": "kontrollraum",
-        "pickupable": True
+        "pickupable": True,
+        "image": "gasmaske.png"
     },
     "waffe": {
         "name": "waffe",
@@ -149,7 +155,8 @@ items_level2 = {
             "um das Monster zu töten."
         ),
         "location": "none",  # Noch nicht im Raum
-        "pickupable": False
+        "pickupable": False,
+        "image": "waffe.png"
     }
 }
 

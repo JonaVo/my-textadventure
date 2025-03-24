@@ -37,7 +37,7 @@ def index():
     if 'current_room' not in session:
         session['current_room'] = 'start'
     if 'inventory' not in session:
-        session['inventory'] = []
+        session['inventory'] = {}
     if 'command_count' not in session:
         session['command_count'] = 0
     if 'endnote' not in session:
@@ -67,7 +67,7 @@ def index():
     if npcs_in_room:
         description += "\n\nDu siehst hier: " + ", ".join(npcs_in_room)
 
-    return render_template('index.html', description=description, message="", error = "", image = rooms[current_room]['image'], room = current_room)
+    return render_template('index.html', description=description, message="", error = "", image = rooms[current_room]['image'], room = current_room, inventory = session.get('inventory', {}))
 
 
 @app.route('/command', methods=['POST'])
@@ -97,7 +97,7 @@ def handle_command():
         session['level'] = new_level
         # Raum zurücksetzen, Inventar leeren etc., falls du das pro Level willst
         session['current_room'] = 'start'
-        session['inventory'] = []
+        session['inventory'] = {}
         # ... oder nur selektiv zurücksetzen
         session.pop('rooms', None)
         session.pop('items', None)
@@ -122,8 +122,7 @@ def handle_command():
     npcs_in_room = [n for n, data in npcs.items() if data['location'] == current_room]
     if npcs_in_room:
         description += "\n\nDu siehst hier: " + ", ".join(npcs_in_room)
-
-    return render_template('index.html', description=description, message=message, error = error, image = rooms[current_room]['image'], room = current_room)
+    return render_template('index.html', description=description, message=message, error = error, image = rooms[current_room]['image'], room = current_room, inventory = session.get('inventory', {}))
 
 
 @app.route('/end')

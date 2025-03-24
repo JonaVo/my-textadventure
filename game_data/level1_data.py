@@ -68,7 +68,8 @@ items_level1 = {
         "name": "schlüssel",
         "description": "Ein rostiger Schlüssel, der schon bessere Tage gesehen hat.",
         "location": "tankstelle",  # Hier kann er gefunden werden
-        "pickupable": True
+        "pickupable": True,
+        "image": "schluessel.png"
     },
     "truhencode": {
         "name": "truhencode",

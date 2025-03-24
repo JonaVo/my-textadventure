@@ -119,6 +119,36 @@
       input[type="submit"]:hover {
         background-color: #777;
       }
+      .inventory-bar {
+        display: flex;
+        overflow-x: auto;
+        padding: 10px;
+        gap: 8px;
+        background-color: #111;
+        border: 1px solid #444;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        min-height: 50px;
+        min-width: 50px;
+      }
+
+      .inventory-item {
+        flex: 0 0 auto;
+        width: 48px;
+        height: 48px;
+        background-color: black;
+        border: 2px solid #555;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .inventory-item img {
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain;
+      }
     </style>
   </head>
   <body>
@@ -133,7 +163,7 @@
         {% if image %}
         <div class="left-column">
           <img
-            src="{{ url_for('static', filename='images/' ~ image) }}"
+            src="{{ url_for('static', filename='images/rooms/' ~ image) }}"
             alt="Raumbild"
             class="image"
           />
@@ -144,6 +174,16 @@
         </div>
       </div>
       <div class="controls">
+        <div class="inventory-bar">
+          {% for item_key, item_data in inventory.items() %}
+          <div class="inventory-item" title="{{ item_data.name }}">
+            <img
+              src="{{ url_for('static', filename='images/items/' ~ item_data.image) }}"
+              alt="{{ item_data.name }}"
+            />
+          </div>
+          {% endfor %}
+        </div>
         <form method="post" action="{{ url_for('handle_command') }}">
           <input
             type="text"
