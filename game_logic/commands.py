@@ -31,11 +31,34 @@ def process_command(command_text, session_data, rooms, items, npcs):
     won_game = False
 
     # 1) Bewegung
-    if verb in rooms[current_room]:
-        next_room = rooms[current_room][verb]
+    if verb in rooms[current_room].get("commands", {}):
+        next_room = rooms[current_room]["commands"][verb]
 
-        # Spezialfall: Monsterarena
-        if next_room == "monsterarena":
+        #checkt ob der nächste Raum ein Schloss hat und verschlossen ist
+        if "locked" in rooms[next_room]:
+            if rooms[next_room]["locked"]:
+
+                #checkt ob der User den Schlüssel im inventar hat
+                if "key" in rooms[next_room]:
+                    if rooms[next_room]['key'] not in session['inventory']:
+                        message = (
+                                "Dieser Raum ist noch viel zu gefährlich für dich. Versuch NICHT nocheinmal ihn zu betreten. Es könnte das Letzte sein, was du tust."
+                            )
+                        session['rooms'][next_room]["locked"] = False
+                        return message, error, new_level, end_game, won_game
+        
+        # wenn ich in einen offenen raum will, von dem ich den key nicht habe, geh ich drauf
+        if "key" in rooms[next_room]:
+                    if rooms[next_room]['key'] not in session['inventory']:
+                        error = (
+                                "Du hast einen Raum betreten, den du nicht hättest betreten sollen."
+                                "Du stribst einen furchtbaren Tod."
+                            )
+                        end_game = True
+                        return message, error, new_level, end_game, won_game
+
+
+        elif next_room == "monsterarena":
             if not waffe_fertig:
                 # Ohne fertige Waffe -> Game Over
                 message = (
@@ -44,7 +67,6 @@ def process_command(command_text, session_data, rooms, items, npcs):
                     "Das Spiel ist beendet!"
                 )
                 end_game = True
-                won_game = False
             else:
                 # Mit fertiger Waffe -> Sieg
                 message = (
@@ -201,7 +223,7 @@ def process_command(command_text, session_data, rooms, items, npcs):
         return message, error, new_level, end_game, won_game
 
     # 7) Ungültiger Befehl
-    possible_commands = [key for key in rooms[current_room].keys() if key != "description"]
+    possible_commands = list(rooms[current_room].get("commands", {}).keys())
     possible_commands += ["nimm <item>", "untersuche <objekt>", "rede mit <person>", "benutze <item> auf <ziel>", "inventar"]
     error = "Ungültiger Befehl. Versuche es mit: " + ", ".join(possible_commands)
     return message, error, new_level, end_game, won_game

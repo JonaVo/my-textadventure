@@ -14,8 +14,10 @@ rooms_level2 = {
             "Ausgänge: osten (Kontrollraum), norden (Werkhalle)"
         ),
         "image": "fabrikhof.png",
-        "osten": "kontrollraum",
-        "norden": "werkhalle"
+        "commands": {
+            "osten": "kontrollraum",
+            "norden": "werkhalle"
+        }
     },
     "kontrollraum": {
         "description": (
@@ -24,8 +26,10 @@ rooms_level2 = {
             "Ausgänge: westen (zurück zum Fabrikhof), süden (Chemielabor)"
         ),
         "image": "kontrollraum.png",
-        "westen": "start",
-        "süden": "chemielabor"
+        "commands": {
+            "westen": "start",
+            "süden": "chemielabor"
+        }
     },
     "werkhalle": {
         "description": (
@@ -34,8 +38,10 @@ rooms_level2 = {
             "Ausgänge: süden (Fabrikhof), osten (Lagerhalle)"
         ),
         "image": "werkhalle.png",
-        "süden": "start",
-        "osten": "lagerhalle"
+        "commands": {
+            "süden": "start",
+            "osten": "lagerhalle"
+        }
     },
     "chemielabor": {
         "description": (
@@ -45,8 +51,12 @@ rooms_level2 = {
             "Ausgänge: norden (Kontrollraum), osten (Lagerhalle)"
         ),
         "image": "chemielabor.png",
-        "norden": "kontrollraum",
-        "osten": "lagerhalle"
+        "commands": {
+            "norden": "kontrollraum",
+            "osten": "lagerhalle"
+        },
+        "locked": True,
+        "key": "gasmaske"
     },
     "lagerhalle": {
         "description": (
@@ -58,9 +68,11 @@ rooms_level2 = {
             "je nach Raum, den du ansteuern willst.)"
         ),
         "image": "lagerhalle.png",
-        "westen": "werkhalle",  # oder z. B. "werkhalle_eingang"
-        "westen2": "chemielabor",
-        "norden": "monsterarena"
+        "commands": {
+            "westen": "werkhalle",
+            "westen2": "chemielabor",
+            "norden": "monsterarena"
+        }
     },
     "monsterarena": {
         "description": (
@@ -69,7 +81,11 @@ rooms_level2 = {
             "Ausgänge: süden (zurück zur Lagerhalle)"
         ),
         "image": "monsterarena.png",
-        "süden": "lagerhalle"
+        "commands": {
+            "süden": "lagerhalle"
+        },
+        "locked": True,
+        "key": "waffe"
     }
 }
 

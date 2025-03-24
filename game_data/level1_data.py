@@ -9,8 +9,10 @@ rooms_level1 = {
             "\n\nAusgänge: norden (Siedlung), osten (Tankstelle)"
         ),
         "image": "unterschlupf.png",
-        "norden": "siedlung",
-        "osten": "tankstelle"
+        "commands": {
+            "norden": "siedlung",
+            "osten": "tankstelle"
+        }
     },
     "siedlung": {
         "description": (
@@ -20,8 +22,10 @@ rooms_level1 = {
             "\n\nAusgänge: süden (zurück zum Unterschlupf), westen (Waldpfad)"
         ),
         "image": "siedlung.png",
-        "süden": "start",
-        "westen": "waldpfad"
+        "commands": {
+            "süden": "start",
+            "westen": "waldpfad"
+        }
     },
     "tankstelle": {
         "description": (
@@ -30,7 +34,9 @@ rooms_level1 = {
             "\n\nAusgänge: westen (zurück zum Unterschlupf)"
         ),
         "image": "tankstelle.png",
-        "westen": "start"
+        "commands": {
+            "westen": "start"
+        }
     },
     "waldpfad": {
         "description": (
@@ -39,8 +45,10 @@ rooms_level1 = {
             "\n\nAusgänge: osten (Siedlung), norden (schuppen)"
         ),
         "image": "waldpfad.png",
-        "osten": "siedlung",
-        "norden": "schuppen"
+        "commands": {
+            "osten": "siedlung",
+            "norden": "schuppen"
+        }
     },
     "schuppen": {
         "description": (
@@ -49,7 +57,9 @@ rooms_level1 = {
             "\n\nAusgänge: süden (zurück zum Waldpfad)"
         ),
         "image": "schuppen.png",
-        "süden": "waldpfad"
+        "commands": {
+            "süden": "waldpfad"
+        }
     }
 }
 

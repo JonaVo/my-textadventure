@@ -33,7 +33,7 @@ def get_level_data(level):
 @app.route('/')
 def index():
     if 'level' not in session:
-        session['level'] = 1
+        session['level'] = 2
     if 'current_room' not in session:
         session['current_room'] = 'start'
     if 'inventory' not in session:
@@ -82,9 +82,11 @@ def handle_command():
         items = session['items']
         npcs = session['npcs']
 
+    
+
     # process_command gibt uns den Text zurück, der angezeigt werden soll,
     # und ggf. ob wir das Level wechseln oder das Spiel beenden wollen.
-    message,error, new_level, end_game, won_game = process_command(
+    message, error, new_level, end_game, won_game = process_command(
         command_text, session, rooms, items, npcs
     )
 
