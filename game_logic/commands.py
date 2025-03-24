@@ -50,8 +50,8 @@ def process_command(command_text, session_data, rooms, items, npcs):
         # wenn ich in einen offenen raum will, von dem ich den key nicht habe, geh ich drauf
         if "key" in rooms[next_room]:
                     if rooms[next_room]['key'] not in session['inventory']:
-                        error = (
-                                "Du hast einen Raum betreten, den du nicht hättest betreten sollen."
+                        message = (
+                                "Du hast einen Raum betreten, den du nicht hättest betreten sollen. "
                                 "Du stribst einen furchtbaren Tod."
                             )
                         end_game = True
@@ -170,7 +170,28 @@ def process_command(command_text, session_data, rooms, items, npcs):
     if verb == 'benutze':
         # Spieler muss "benutze <item> für <ziel>" eingeben
         if len(words) == 4 and words[2] == 'für':
+            tool = words[1]
             target = words[3]
+
+            #Monster Rätsel
+            if target == 'monster' and current_room == 'monsterarena':
+                if tool == 'waffe':
+                    message = (
+                        "Du erschießt das Monster. Es fällt um wie ein Sack und landet in einem dunklen Schacht. "
+                        "Du hast das Level beendet!"
+                    )
+                    end_game = True
+                    won_game = True
+                    session['level'] = session['level'] +1  # Spielende
+                else:
+                    message = (
+                        "Du hättest lieber deine Waffe benutzen sollen. "
+                        "Das Monster kommt langsam auf dich zu. "
+                        "Es packt dich und frisst dich mit einem Happen auf."
+                    )
+                    end_game = True
+                return message, error, new_level, end_game, won_game
+
             # Altes Truhenrätsel: In Raum 'schuppen', 'benutze schlüssel für truhe'
             if target == 'truhe' and current_room == 'schuppen':
                 if 'schlüssel' in inventory and got_code:

@@ -40,6 +40,8 @@ def index():
         session['inventory'] = []
     if 'command_count' not in session:
         session['command_count'] = 0
+    if 'endnote' not in session:
+        session['endnote'] = ''
 
     level = session['level']
     # Falls noch keine Level-Daten in der Session gespeichert sind, initialisiere sie
@@ -89,6 +91,7 @@ def handle_command():
     message, error, new_level, end_game, won_game = process_command(
         command_text, session, rooms, items, npcs
     )
+    session ['endnote'] = message
 
     if new_level is not None:
         session['level'] = new_level
@@ -128,13 +131,13 @@ def endgame():
     command_count = session.get('command_count', 0)
 
     if session['level'] == final_level:
-        return render_template('end.html', command_count=command_count)
+        return render_template('end.html', command_count=command_count, endnote = session.get('endnote', ""))
     else : 
-        return render_template('end_of_level.html', command_count=command_count)
+        return render_template('end_of_level.html', command_count=command_count, endnote = session.get('endnote', ""))
 
 @app.route('/defeat')
 def defeat():
-    return render_template('defeat.html')
+    return render_template('defeat.html', endnote = session.get('endnote', "Debug"))
 
 
 @app.route('/restart', methods=['POST'])

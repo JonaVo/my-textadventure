@@ -20,6 +20,7 @@
         margin: 0 auto;
         animation: fadeIn 2s;
       }
+
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -44,6 +45,7 @@
   </head>
   <body>
     <div class="container">
+      <p>{{ endnote }}</p>
       <h1>Verloren!</h1>
       <p>Du hast verloren und musst von vorne starten.</p>
       <form action="{{ url_for('restart') }}" method="post">
