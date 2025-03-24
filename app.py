@@ -42,7 +42,17 @@ def index():
         session['command_count'] = 0
 
     level = session['level']
-    rooms, items, npcs = copy.deepcopy(get_level_data(level))
+    # Falls noch keine Level-Daten in der Session gespeichert sind, initialisiere sie
+    if 'rooms' not in session or 'items' not in session or 'npcs' not in session:
+        rooms, items, npcs = copy.deepcopy(get_level_data(level))
+        session['rooms'] = rooms
+        session['items'] = items
+        session['npcs'] = npcs
+    else:
+        rooms = session['rooms']
+        items = session['items']
+        npcs = session['npcs']
+
     current_room = session['current_room']
 
     # Beschreibung aus dem passenden Dictionary holen
@@ -64,7 +74,13 @@ def handle_command():
     session['command_count'] = session.get('command_count', 0) + 1
 
     level = session['level']
-    rooms, items, npcs = copy.deepcopy(get_level_data(level))
+    # Lade die Level-Daten aus der Session, falls vorhanden, ansonsten initialisiere sie
+    if 'rooms' not in session or 'items' not in session or 'npcs' not in session:
+        rooms, items, npcs = copy.deepcopy(get_level_data(level))
+    else:
+        rooms = session['rooms']
+        items = session['items']
+        npcs = session['npcs']
 
     # process_command gibt uns den Text zurück, der angezeigt werden soll,
     # und ggf. ob wir das Level wechseln oder das Spiel beenden wollen.
@@ -78,12 +94,19 @@ def handle_command():
         session['current_room'] = 'start'
         session['inventory'] = []
         # ... oder nur selektiv zurücksetzen
+        session.pop('rooms', None)
+        session.pop('items', None)
+        session.pop('npcs', None)
 
     if end_game and won_game:
         return redirect(url_for('endgame'))
     elif end_game:
         return redirect(url_for('defeat'))
     
+    session['rooms'] = rooms
+    session['items'] = items
+    session['npcs'] = npcs
+
     current_room = session['current_room']
     description = rooms[current_room]['description']
 
