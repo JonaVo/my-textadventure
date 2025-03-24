@@ -33,7 +33,7 @@ def get_level_data(level):
 @app.route('/')
 def index():
     if 'level' not in session:
-        session['level'] = 2
+        session['level'] = 1
     if 'current_room' not in session:
         session['current_room'] = 'start'
     if 'inventory' not in session:
