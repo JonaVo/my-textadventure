@@ -8,43 +8,88 @@
         background-color: black;
         color: white;
         font-family: "Courier New", Courier, monospace;
-        display: flex;
-        justify-content: center;
-        align-items: start;
-        height: 100vh;
         margin: 0;
-        margin-top: 20vh;
+        padding: 0;
       }
+
       .container {
-        text-align: start;
-        animation: fadeIn 2s;
-        max-width: 700px; /* Begrenze die Breite auf 700px */
-        margin: 0 auto; /* Zentriert die Container-Box */
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10vh;
       }
-      .situation {
-        min-height: 200px;
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
       }
-      /*@keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }*/
+
+      .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        max-width: 1100px;
+      }
+
+      .left-column {
+        flex: 1;
+        text-align: right; /* Bild nach rechts orientieren */
+        margin-right: 15px;
+        margin-left: 15px;
+        width: 50%;
+      }
+
+      p {
+        margin-block-start: 0;
+      }
+
+      .right-column {
+        flex: 1;
+        text-align: left; /* Inhalt nach links orientieren */
+        display: flex;
+        flex-direction: column;
+        margin-right: 15px;
+        margin-left: 15px;
+        align-items: center;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* horizontale Zentrierung */
+        align-items: center;
+        max-width: 700px;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 30px; /* Zentriert den Container */
+      }
+
+      .image {
+        max-width: 500px;
+        min-height: 285px;
+      }
+
       input[type="text"] {
-        background-color: #111; /* Dunkles Grau für den Hintergrund */
-        color: #ccc; /* Hellgraue Schrift */
-        border: 1px solid #555; /* Etwas dunklerer Rand */
+        background-color: #111;
+        color: #ccc;
+        border: 1px solid #555;
         padding: 8px;
         font-size: 16px;
-        margin-top: 20px; /* Mehr Abstand nach oben */
+        margin-top: 20px;
+        width: 100%;
+        max-width: 500px;
+        box-sizing: border-box;
       }
-      /* Entfernt die blaue Outline bei Fokus */
+
       input[type="text"]:focus {
         outline: none;
         box-shadow: none;
       }
+
       input[type="submit"] {
         background-color: #555;
         color: white;
@@ -53,6 +98,7 @@
         cursor: pointer;
         font-size: 16px;
       }
+
       input[type="submit"]:hover {
         background-color: #777;
       }
@@ -60,29 +106,45 @@
   </head>
   <body>
     <div class="container">
-      <h1>Post-Apocalyptic Text Adventure</h1>
-      <!-- Hier sorgen wir mit white-space: pre-line dafür, dass Zeilenumbrüche im String angezeigt werden. -->
-      <p style="white-space: pre-line" class="situation">{{ description }}</p>
-
-      <form method="post" action="{{ url_for('handle_command') }}">
-        <input
-          type="text"
-          name="command"
-          autofocus
-          placeholder="Befehl eingeben"
-        />
-        <p style="font-size: 14px; color: #ccc; margin-top: 8px">
-          Drücke Enter um deine Eingabe abzusenden
-        </p>
-      </form>
-
-      {% if message %}
-      <!-- Auch hier white-space: pre-line, falls du Zeilenumbrüche im message-Text hast. -->
-      <p style="white-space: pre-line; color: lightblue">{{ message }}</p>
-      {% endif %} {% if error %}
-      <!-- Auch hier white-space: pre-line, falls du Zeilenumbrüche im message-Text hast. -->
-      <p style="white-space: pre-line; color: red">{{ error }}</p>
+      {% if room %}
+      <div class="header">
+        <h1>{{ room | upper }}</h1>
+      </div>
       {% endif %}
+
+      <div class="content">
+        {% if image %}
+        <div class="left-column">
+          <img
+            src="{{ url_for('static', filename='images/' ~ image) }}"
+            alt="Raumbild"
+            class="image"
+          />
+        </div>
+        {% endif %}
+        <div class="right-column">
+          <p style="white-space: pre-line">{{ description }}</p>
+        </div>
+      </div>
+      <div class="controls">
+        <form method="post" action="{{ url_for('handle_command') }}">
+          <input
+            type="text"
+            name="command"
+            autofocus
+            placeholder="Befehl eingeben"
+          />
+          <p style="font-size: 14px; color: #ccc; margin-top: 8px">
+            Drücke Enter um deine Eingabe abzusenden
+          </p>
+        </form>
+
+        {% if message %}
+        <p style="white-space: pre-line; color: lightblue">{{ message }}</p>
+        {% endif %} {% if error %}
+        <p style="white-space: pre-line; color: red">{{ error }}</p>
+        {% endif %}
+      </div>
     </div>
   </body>
 </html>

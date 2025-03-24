@@ -8,6 +8,7 @@ rooms_level1 = {
             "Du hörst in der Ferne das Fauchen des Windes und erkennst die Trümmer einer alten Tankstelle."
             "\n\nAusgänge: norden (Siedlung), osten (Tankstelle)"
         ),
+        "image": "unterschlupf.png",
         "norden": "siedlung",
         "osten": "tankstelle"
     },
@@ -18,6 +19,7 @@ rooms_level1 = {
             "Am Straßenrand sitzt ein Wanderer in zerlumpten Kleidern, der dich aufmerksam mustert."
             "\n\nAusgänge: süden (zurück zum Unterschlupf), westen (Waldpfad)"
         ),
+        "image": "siedlung.png",
         "süden": "start",
         "westen": "waldpfad"
     },
@@ -27,6 +29,7 @@ rooms_level1 = {
             "Der Boden ist von Trümmern bedeckt. Vielleicht findest du hier etwas Nützliches."
             "\n\nAusgänge: westen (zurück zum Unterschlupf)"
         ),
+        "image": "tankstelle.png",
         "westen": "start"
     },
     "waldpfad": {
@@ -35,6 +38,7 @@ rooms_level1 = {
             "Zwischen den Stämmen erkennst du einen alten Schuppen."
             "\n\nAusgänge: osten (Siedlung), norden (schuppen)"
         ),
+        "image": "waldpfad.png",
         "osten": "siedlung",
         "norden": "schuppen"
     },
@@ -44,6 +48,7 @@ rooms_level1 = {
             "Im Inneren erkennst du eine alte Truhe, die scheinbar verschlossen ist."
             "\n\nAusgänge: süden (zurück zum Waldpfad)"
         ),
+        "image": "schuppen.png",
         "süden": "waldpfad"
     }
 }

@@ -65,7 +65,7 @@ def index():
     if npcs_in_room:
         description += "\n\nDu siehst hier: " + ", ".join(npcs_in_room)
 
-    return render_template('index.html', description=description, message="", error = "")
+    return render_template('index.html', description=description, message="", error = "", image = rooms[current_room]['image'], room = current_room)
 
 
 @app.route('/command', methods=['POST'])
@@ -118,7 +118,7 @@ def handle_command():
     if npcs_in_room:
         description += "\n\nDu siehst hier: " + ", ".join(npcs_in_room)
 
-    return render_template('index.html', description=description, message=message, error = error)
+    return render_template('index.html', description=description, message=message, error = error, image = rooms[current_room]['image'], room = current_room)
 
 
 @app.route('/end')

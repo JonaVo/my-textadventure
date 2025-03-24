@@ -13,6 +13,7 @@ rooms_level2 = {
             "überall. In der Ferne ragen die Überreste von Werkshallen auf.\n\n"
             "Ausgänge: osten (Kontrollraum), norden (Werkhalle)"
         ),
+        "image": "fabrikhof.png",
         "osten": "kontrollraum",
         "norden": "werkhalle"
     },
@@ -22,6 +23,7 @@ rooms_level2 = {
             "hier verbarrikadiert. Überall flackern defekte Monitore.\n\n"
             "Ausgänge: westen (zurück zum Fabrikhof), süden (Chemielabor)"
         ),
+        "image": "kontrollraum.png",
         "westen": "start",
         "süden": "chemielabor"
     },
@@ -31,6 +33,7 @@ rooms_level2 = {
             "zertrümmerten Maschinen. Es riecht nach Öl und Staub.\n\n"
             "Ausgänge: süden (Fabrikhof), osten (Lagerhalle)"
         ),
+        "image": "werkhalle.png",
         "süden": "start",
         "osten": "lagerhalle"
     },
@@ -41,6 +44,7 @@ rooms_level2 = {
             "liegt in der Luft.\n\n"
             "Ausgänge: norden (Kontrollraum), osten (Lagerhalle)"
         ),
+        "image": "chemielabor.png",
         "norden": "kontrollraum",
         "osten": "lagerhalle"
     },
@@ -53,6 +57,7 @@ rooms_level2 = {
             "\n(Hinweis: Hier musst du vielleicht \"westen\" oder \"westen2\" eingeben, "
             "je nach Raum, den du ansteuern willst.)"
         ),
+        "image": "lagerhalle.png",
         "westen": "werkhalle",  # oder z. B. "werkhalle_eingang"
         "westen2": "chemielabor",
         "norden": "monsterarena"
@@ -63,6 +68,7 @@ rooms_level2 = {
             "siehst du einen unheimlichen Schatten – das Monster!\n\n"
             "Ausgänge: süden (zurück zur Lagerhalle)"
         ),
+        "image": "monsterarena.png",
         "süden": "lagerhalle"
     }
 }
