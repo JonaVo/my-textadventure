@@ -58,26 +58,6 @@ def process_command(command_text, session_data, rooms, items, npcs):
                         return message, error, new_level, end_game, won_game
 
 
-        elif next_room == "monsterarena":
-            if not waffe_fertig:
-                # Ohne fertige Waffe -> Game Over
-                message = (
-                    "Du betrittst die Arena ... ein unheimliches Brüllen ertönt. "
-                    "Ohne Waffe hast du keine Chance! Das Monster reißt dich in Stücke.\n"
-                    "Das Spiel ist beendet!"
-                )
-                end_game = True
-            else:
-                # Mit fertiger Waffe -> Sieg
-                message = (
-                    "Bewaffnet betrittst du die Arena. Das Monster greift an, "
-                    "doch du bist bereit. Mit einem letzten Schuss besiegst du es!\n"
-                    "Du hast das Spiel erfolgreich beendet!"
-                )
-                end_game = True
-                won_game = True
-                session['level'] = session['level'] +1
-            return message, error, new_level, end_game, won_game
 
         # Normaler Raumwechsel
         session_data['current_room'] = next_room
@@ -188,10 +168,10 @@ def process_command(command_text, session_data, rooms, items, npcs):
 
     # 5) Benutze ...
     if verb == 'benutze':
-        # Spieler muss "benutze <item> auf <ziel>" eingeben
-        if len(words) == 4 and words[2] == 'auf':
+        # Spieler muss "benutze <item> für <ziel>" eingeben
+        if len(words) == 4 and words[2] == 'für':
             target = words[3]
-            # Altes Truhenrätsel: In Raum 'schuppen', 'benutze schlüssel auf truhe'
+            # Altes Truhenrätsel: In Raum 'schuppen', 'benutze schlüssel für truhe'
             if target == 'truhe' and current_room == 'schuppen':
                 if 'schlüssel' in inventory and got_code:
                     message = (
@@ -224,6 +204,6 @@ def process_command(command_text, session_data, rooms, items, npcs):
 
     # 7) Ungültiger Befehl
     possible_commands = list(rooms[current_room].get("commands", {}).keys())
-    possible_commands += ["nimm <item>", "untersuche <objekt>", "rede mit <person>", "benutze <item> auf <ziel>", "inventar"]
+    possible_commands += ["nimm <item>", "untersuche <objekt>", "rede mit <person>", "benutze <item> für <ziel>", "inventar"]
     error = "Ungültiger Befehl. Versuche es mit: " + ", ".join(possible_commands)
     return message, error, new_level, end_game, won_game
