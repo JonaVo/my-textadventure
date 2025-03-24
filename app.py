@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, url_for
+import copy
 
 # Level-Daten
 import game_data.level1_data
@@ -10,6 +11,7 @@ from game_logic.commands import process_command
 app = Flask(__name__)
 app.secret_key = 'dein_geheimer_schlüssel'
 
+final_level = 3
 
 def get_level_data(level):
     """Lädt die passenden Räume, Items, NPCs für das gegebene Level."""
@@ -40,7 +42,7 @@ def index():
         session['command_count'] = 0
 
     level = session['level']
-    rooms, items, npcs = get_level_data(level)
+    rooms, items, npcs = copy.deepcopy(get_level_data(level))
     current_room = session['current_room']
 
     # Beschreibung aus dem passenden Dictionary holen
@@ -53,7 +55,7 @@ def index():
     if npcs_in_room:
         description += "\n\nDu siehst hier: " + ", ".join(npcs_in_room)
 
-    return render_template('index.html', description=description, message="")
+    return render_template('index.html', description=description, message="", error = "")
 
 
 @app.route('/command', methods=['POST'])
@@ -62,11 +64,11 @@ def handle_command():
     session['command_count'] = session.get('command_count', 0) + 1
 
     level = session['level']
-    rooms, items, npcs = get_level_data(level)
+    rooms, items, npcs = copy.deepcopy(get_level_data(level))
 
     # process_command gibt uns den Text zurück, der angezeigt werden soll,
     # und ggf. ob wir das Level wechseln oder das Spiel beenden wollen.
-    message, new_level, end_game = process_command(
+    message,error, new_level, end_game, won_game = process_command(
         command_text, session, rooms, items, npcs
     )
 
@@ -77,8 +79,10 @@ def handle_command():
         session['inventory'] = []
         # ... oder nur selektiv zurücksetzen
 
-    if end_game:
+    if end_game and won_game:
         return redirect(url_for('endgame'))
+    elif end_game:
+        return redirect(url_for('defeat'))
     
     current_room = session['current_room']
     description = rooms[current_room]['description']
@@ -91,18 +95,34 @@ def handle_command():
     if npcs_in_room:
         description += "\n\nDu siehst hier: " + ", ".join(npcs_in_room)
 
-    return render_template('index.html', description=description, message=message)
+    return render_template('index.html', description=description, message=message, error = error)
 
 
 @app.route('/end')
 def endgame():
     command_count = session.get('command_count', 0)
-    return render_template('end.html', command_count=command_count)
+
+    if session['level'] == final_level:
+        return render_template('end.html', command_count=command_count)
+    else : 
+        return render_template('end_of_level.html', command_count=command_count)
+
+@app.route('/defeat')
+def defeat():
+    return render_template('defeat.html')
 
 
 @app.route('/restart', methods=['POST'])
 def restart():
     session.clear()
+    return redirect(url_for('index'))
+
+@app.route('/nextlevel', methods=['POST'])
+def nextlevel():
+    level = session["level"]
+    session.clear()
+    session["level"] = level
+    
     return redirect(url_for('index'))
 
 

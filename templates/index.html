@@ -78,7 +78,10 @@
 
       {% if message %}
       <!-- Auch hier white-space: pre-line, falls du Zeilenumbrüche im message-Text hast. -->
-      <p style="white-space: pre-line; color: red">{{ message }}</p>
+      <p style="white-space: pre-line; color: lightblue">{{ message }}</p>
+      {% endif %} {% if error %}
+      <!-- Auch hier white-space: pre-line, falls du Zeilenumbrüche im message-Text hast. -->
+      <p style="white-space: pre-line; color: red">{{ error }}</p>
       {% endif %}
     </div>
   </body>
