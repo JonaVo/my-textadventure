@@ -1,12 +1,8 @@
 from flask import session, redirect
 
-# Hier importieren wir die Level-spezifischen Puzzle-Funktionen
-from game_logic.level1_logic import handle_level1_puzzle
-from game_logic.level2_logic import handle_level2_puzzle
-
 def process_command(command_text, session_data, rooms, items, npcs):
     """
-    Verarbeitet den Befehl und ruft ggf. level-spezifische Logik auf.
+    Verarbeitet den Befehl und führt das Truhenrätsel aus.
     Gibt zurück:
     - message (str)
     - new_level (int oder None)
@@ -18,7 +14,7 @@ def process_command(command_text, session_data, rooms, items, npcs):
 
     current_room = session_data.get('current_room', 'start')
     inventory = session_data.get('inventory', [])
-    level = session_data.get('level', 1)
+    got_code = session_data.get('got_code', False)
 
     message = ""
     new_level = None
@@ -68,7 +64,7 @@ def process_command(command_text, session_data, rooms, items, npcs):
             if person in npcs and npcs[person]['location'] == current_room:
                 dialogue_lines = npcs[person]['dialogue']
                 message = "\n".join(dialogue_lines)
-                # Beispiel: Wenn das Gespräch den Code verrät, setze got_code auf True
+                # Wenn das Gespräch den Code verrät, setze got_code auf True
                 session_data['got_code'] = True
             else:
                 message = f"'{person}' ist nicht hier."
@@ -77,18 +73,23 @@ def process_command(command_text, session_data, rooms, items, npcs):
 
         return message, new_level, end_game
 
-    # 5) Benutze ...
+    # 5) Benutze ... (direkt das Truhenrätsel einbauen)
     if verb == 'benutze':
-        # Bevor wir den Standard abhandeln, schauen wir, ob es level-spezifische Puzzle gibt
-        puzzle_handled, puzzle_message, puzzle_new_level, puzzle_end_game = handle_level_specific(
-            level, command_text, session_data, rooms, items, npcs
-        )
-        if puzzle_handled:
-            return puzzle_message, puzzle_new_level, puzzle_end_game
-
-        # Falls das Puzzle nicht vom Level-Handler verarbeitet wurde,
-        # machen wir hier Standardaktionen ...
-        # ...
+        # Spieler muss "benutze <item> auf <ziel>" eingeben
+        if len(words) == 4 and words[2] == 'auf':
+            target = words[3]
+            # Truhenrätsel: In Raum 'schuppen', 'benutze schlüssel auf truhe'
+            if target == 'truhe' and current_room == 'schuppen':
+                if 'schlüssel' in inventory and got_code:
+                    message = (
+                        "Du hast die Truhe geöffnet! Darin findest du Vorräte und ein altes Buch. "
+                        "Ein helles Licht blendet dich ... Du hast das Spiel beendet!"
+                    )
+                    end_game = True  # Spielende
+                else:
+                    message = "Dir fehlt entweder der Schlüssel oder der Code."
+                return message, new_level, end_game
+        # Falls kein Rätsel getriggert wird, kann man hier optional eine Standardaktion einbauen
         pass
 
     # 6) Inventar
@@ -104,16 +105,3 @@ def process_command(command_text, session_data, rooms, items, npcs):
     possible_commands += ["nimm <item>", "untersuche <objekt>", "rede mit <person>", "benutze <item> auf <ziel>", "inventar"]
     message = "Ungültiger Befehl. Versuche es mit: " + ", ".join(possible_commands)
     return message, new_level, end_game
-
-
-def handle_level_specific(level, command_text, session_data, rooms, items, npcs):
-    """
-    Ruft je nach Level die passende Puzzle-Funktion auf.
-    """
-    if level == 1:
-        return handle_level1_puzzle(command_text, session_data, rooms, items, npcs)
-    elif level == 2:
-        return handle_level2_puzzle(command_text, session_data, rooms, items, npcs)
-
-    # Keine spezielle Logik
-    return False, "", None, False
